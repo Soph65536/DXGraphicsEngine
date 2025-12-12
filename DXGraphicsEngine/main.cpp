@@ -1,4 +1,5 @@
 #include <iostream>
+
 #include "Window.h"
 #include "Renderer.h"
 #include "Mesh.h"
@@ -39,23 +40,22 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 	Mesh mesh_grass{ renderer, "Assets/Models/grass.obj", true };
 	
 	Texture tex_skybox{ renderer, "Assets/Textures/Skybox/skybox02.dds", false, Texture::TextureType::Cubemap };
-	Texture tex_box{ renderer, "Assets/Textures/Box.bmp" };
 	Texture tex_fish{ renderer, "Assets/Textures/fish_texture.png", true };
 	Texture tex_flower{ renderer, "Assets/Textures/flower.png", true };
 	
 	//make materials
-	Material mat_unlit{ "Unlit", renderer, "Compiled Shaders/VertexShader.cso", "Compiled Shaders/FragmentShader.cso", &tex_box };
-	MaterialLit mat_lit{ "Lit", renderer, "Compiled Shaders/ReflectiveVShader.cso", "Compiled Shaders/ReflectiveFShader.cso", &tex_box };
-	mat_lit.SetReflectionTexture(&tex_skybox);
+	MaterialLit mat_skybox{ "Lit", renderer, "Compiled Shaders/SkyboxVShader.cso", "Compiled Shaders/SkyboxFShader.cso", &tex_skybox };
+	MaterialLit mat_shiny{ "Lit", renderer, "Compiled Shaders/ReflectiveVShader.cso", "Compiled Shaders/ReflectiveFShader.cso", &tex_fish };
+	mat_shiny.SetReflectionTexture(&tex_skybox);
 
 	//skybox object
-	GameObject obj_skybox{ "Skybox", &mesh_cube, &mat_unlit };
+	GameObject obj_skybox{ "Skybox", &mesh_cube, &mat_skybox };
 	renderer.skyboxObject = &obj_skybox;
 
 	//make gameobjects (render transparent objects last!!)
-	GameObject objSphere{ "Sphere", &mesh_sphere, &mat_lit };
-	GameObject objFish{ "Fish", &mesh_fish, &mat_unlit };
-	GameObject objFlower{ "Flower", &mesh_grass, &mat_unlit };
+	GameObject objSphere{ "Sphere", &mesh_sphere, &mat_shiny };
+	GameObject objFish{ "Fish", &mesh_fish, &mat_shiny };
+	GameObject objFlower{ "Flower", &mesh_grass, &mat_shiny };
 
 	//set lighting
 	renderer.directionalLights[0] = { DirectX::XMVECTOR{ 0.3f, 0.7f, 0.7f }, { 0, 0.8f, 0.75f }, true };
@@ -141,6 +141,7 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 			if (msState.leftButton) {
 				renderer.camera.transform.SetPosition({ 0, 0, -5 });
 			}
+
 
 			//camera collision
 			if (BoxCollider::BoxCollision(renderer.camera.transform, objFish.transform)) { renderer.RemoveGameObject(&objFish); }

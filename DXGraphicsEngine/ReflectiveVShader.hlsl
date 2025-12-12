@@ -9,7 +9,7 @@ struct VOutR
     float4 colour : COLOUR;
 };
 
-cbuffer rvLightingData //: register(b13) //this buffer is binded to register 13
+cbuffer rvLightingData //this constant buffer needs to be at register 0, which is why we have a duplicate in the shader file
 {
     float4 rvAmbientLightColour;
     DirectionalLight rvDirectionalLights[MAX_DIRECTIONAL_LIGHTS];
