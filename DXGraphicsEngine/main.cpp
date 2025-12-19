@@ -39,27 +39,42 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 
 	//get models and textures
 	Mesh mesh_cube{ renderer, "Assets/Models/cube.obj" };
-	Mesh mesh_sphere{ renderer, "Assets/Models/sphere.obj" };
-	Mesh mesh_fish{ renderer, "Assets/Models/fish.obj" };
+	Mesh mesh_anglefish{ renderer, "Assets/Models/anglefish.obj" };
+	Mesh mesh_basicfish{ renderer, "Assets/Models/basicfish.obj" };
+	Mesh mesh_jellyfish{ renderer, "Assets/Models/jellyfish.obj" };
+	Mesh mesh_mantaray{ renderer, "Assets/Models/mantaray.obj" };
+	Mesh mesh_squid{ renderer, "Assets/Models/squid.obj" };
+	Mesh mesh_whale{ renderer, "Assets/Models/whale.obj" };
 	Mesh mesh_grass{ renderer, "Assets/Models/grass.obj", true };
 	
 	Texture tex_skybox{ renderer, "Assets/Textures/Skybox/skybox02.dds", false, Texture::TextureType::Cubemap };
-	Texture tex_fish{ renderer, "Assets/Textures/fish_texture.png", true };
+	Texture tex_anglefish{ renderer, "Assets/Textures/anglefish.png" };
+	Texture tex_basicfish{ renderer, "Assets/Textures/basicfish.png" };
+	Texture tex_jellyfish{ renderer, "Assets/Textures/jellyfish.png" };
+	Texture tex_mantaray{ renderer, "Assets/Textures/mantaray.png" };
+	Texture tex_squid{ renderer, "Assets/Textures/squid.png" };
+	Texture tex_whale{ renderer, "Assets/Textures/whale.png" };
 	Texture tex_flower{ renderer, "Assets/Textures/flower.png", true };
 	
 	//make materials
-	MaterialLit mat_skybox{ "Lit", renderer, "Compiled Shaders/SkyboxVShader.cso", "Compiled Shaders/SkyboxFShader.cso", &tex_skybox };
-	MaterialLit mat_shiny{ "Lit", renderer, "Compiled Shaders/ReflectiveVShader.cso", "Compiled Shaders/ReflectiveFShader.cso", &tex_fish };
-	mat_shiny.SetReflectionTexture(&tex_skybox);
+	MaterialLit mat_skybox{ "Lit Skybox", renderer, "Compiled Shaders/SkyboxVShader.cso", "Compiled Shaders/SkyboxFShader.cso", &tex_skybox };
+	MaterialLit mat_flower{ "Lit Flower", renderer, "Compiled Shaders/VertexShader.cso", "Compiled Shaders/FragmentShader.cso", &tex_flower };
+	MaterialLit mat_anglefish{ "Lit Angle Fish", renderer, "Compiled Shaders/VertexShader.cso", "Compiled Shaders/FragmentShader.cso", &tex_anglefish };
+	MaterialLit mat_shinybasicfish{ "Lit Basic Fish", renderer, "Compiled Shaders/ReflectiveVShader.cso", "Compiled Shaders/ReflectiveFShader.cso", &tex_basicfish };
+	mat_shinybasicfish.SetReflectionTexture(&tex_skybox);
 
 	//skybox object
 	GameObject obj_skybox{ "Skybox", &mesh_cube, &mat_skybox };
 	renderer.skyboxObject = &obj_skybox;
 
 	//make gameobjects (render transparent objects last!!)
-	GameObject objSphere{ "Sphere", &mesh_sphere, &mat_shiny };
-	GameObject objFish{ "Fish", &mesh_fish, &mat_shiny };
-	GameObject objFlower{ "Flower", &mesh_grass, &mat_shiny };
+	GameObject objAngleFish{ "AngleFish", &mesh_anglefish, &mat_anglefish };
+	GameObject objBasicFish{ "BasicFish", &mesh_basicfish, &mat_shinybasicfish };
+	GameObject objJellyFish{ "BasicFish", &mesh_jellyfish, &mat_shinybasicfish };
+	GameObject objMantaRay{ "BasicFish", &mesh_mantaray, &mat_shinybasicfish };
+	GameObject objSquid{ "BasicFish", &mesh_squid, &mat_shinybasicfish };
+	GameObject objWhale{ "BasicFish", &mesh_whale, &mat_shinybasicfish };
+	GameObject objFlower{ "Flower", &mesh_grass, &mat_shinybasicfish };
 
 	//set lighting
 	renderer.directionalLights[0] = { DirectX::XMVECTOR{ 0.3f, 0.7f, 0.7f }, { 0, 0.8f, 0.75f }, true };
@@ -70,14 +85,26 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 	//set camera and gameobject positions
 	renderer.camera.transform.SetPosition({ 0, 0, -5 });
 
-	renderer.RegisterGameObject(&objSphere);
-	objSphere.transform.SetPosition({ 0, 0, 3, 1 });
+	renderer.RegisterGameObject(&objAngleFish);
+	objAngleFish.transform.SetPosition({ -3, 0, 0, 0.25f });
 
-	renderer.RegisterGameObject(&objFish);
-	objFish.transform.SetPosition({ -3, 0, 0, 1 });
+	renderer.RegisterGameObject(&objBasicFish);
+	objBasicFish.transform.SetPosition({ 0, 0, 3, 1 });
+
+	renderer.RegisterGameObject(&objJellyFish);
+	objJellyFish.transform.SetPosition({ -3, 0, 3, 1 });
+
+	renderer.RegisterGameObject(&objMantaRay);
+	objMantaRay.transform.SetPosition({ 3, 0, 3, 1 });
+
+	renderer.RegisterGameObject(&objSquid);
+	objSquid.transform.SetPosition({ -3, 0, 6, 0.5f });
+
+	renderer.RegisterGameObject(&objWhale);
+	objWhale.transform.SetPosition({ 3, 0, 6, 1 });
 
 	renderer.RegisterGameObject(&objFlower);
-	objFlower.transform.SetPosition({ 3, 0, 0, 1 });
+	objFlower.transform.SetPosition({ 0, 0, 7, 1 });
 
 	//game variables
 	float deltaTime = 0.001f; //calculate delta time, i will do properly later
@@ -146,11 +173,11 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 
 
 			//camera collision
-			if (BoxCollider::BoxCollision(renderer.camera.transform, objFish.transform)) { FishCollection::CollectFish(objFish, renderer); }
+			if (BoxCollider::BoxCollision(renderer.camera.transform, objAngleFish.transform)) { FishCollection::CollectFish(objAngleFish, renderer); }
 			if (BoxCollider::BoxCollision(renderer.camera.transform, objFlower.transform)) { FishCollection::CollectFish(objFlower, renderer); }
 
-			objSphere.transform.Rotate({ -deltaTime * 0.5f, 0, 0 });
-			objFish.transform.Rotate({ deltaTime, -deltaTime, 0 });
+			objBasicFish.transform.Rotate({ -deltaTime * 0.5f, 0, 0 });
+			objAngleFish.transform.Rotate({ deltaTime, -deltaTime, 0 });
 			objFlower.transform.Rotate({ 0, -deltaTime, 0 });
 
 			renderer.RenderFrame();

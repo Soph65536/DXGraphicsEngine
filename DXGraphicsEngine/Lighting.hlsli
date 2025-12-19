@@ -20,7 +20,7 @@ struct PointLight
     float2 padding;
 };
 
-cbuffer lightingData : register(b13) //this buffer is binded to register 13
+cbuffer lightingData : register(b0)
 {
     float4 ambientLightColour;
     DirectionalLight directionalLights[MAX_DIRECTIONAL_LIGHTS];
