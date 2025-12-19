@@ -8,6 +8,7 @@
 #include "MaterialLit.h"
 #include "GameObject.h"
 #include "BoxCollider.h"
+#include "FishCollection.h"
 #include "Debug.h"
 
 const float walkSpeed = 0.001f;
@@ -26,6 +27,9 @@ void OpenConsole() {
 		std::cout << "Hello Side Console! :)" << std::endl;
 	}
 }
+
+//declare static vars from other classes
+int FishCollection::fishCollected = 0;
 
 //window main
 int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _In_ LPSTR lpCmdLine, _In_ int  nCmdShow) {
@@ -75,7 +79,8 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 	renderer.RegisterGameObject(&objFlower);
 	objFlower.transform.SetPosition({ 3, 0, 0, 1 });
 
-	//movement
+	//game variables
+	float deltaTime = 0.001f; //calculate delta time, i will do properly later
 	float moveSpeed = walkSpeed;
 
 	//declare keyboard tracker
@@ -94,9 +99,6 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 			if (msg.message == WM_QUIT) break; //break out of the loop if get quit message
 		}
 		else {
-			//calculate delta time, i will do properly later
-			float deltaTime = 0.001f;
-
 			//get keyboard input state
 			auto kbState = DirectX::Keyboard::Get().GetState();
 			kbTracker.Update(kbState);
@@ -144,8 +146,8 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 
 
 			//camera collision
-			if (BoxCollider::BoxCollision(renderer.camera.transform, objFish.transform)) { renderer.RemoveGameObject(&objFish); }
-			if (BoxCollider::BoxCollision(renderer.camera.transform, objFlower.transform)) { renderer.RemoveGameObject(&objFlower); }
+			if (BoxCollider::BoxCollision(renderer.camera.transform, objFish.transform)) { FishCollection::CollectFish(objFish, renderer); }
+			if (BoxCollider::BoxCollision(renderer.camera.transform, objFlower.transform)) { FishCollection::CollectFish(objFlower, renderer); }
 
 			objSphere.transform.Rotate({ -deltaTime * 0.5f, 0, 0 });
 			objFish.transform.Rotate({ deltaTime, -deltaTime, 0 });

@@ -6,6 +6,7 @@
 #include "GameObject.h"
 #include "ShaderLoading.h"
 #include "ModelLoader.h"
+#include "FishCollection.h"
 #include "Debug.h"
 
 #include <d3d11.h>
@@ -354,7 +355,9 @@ void Renderer::RenderFrame() {
 		obj->mesh->Render();
 	}
 
-	//RenderText("Hello World", 100, 100);
+	if (FishCollection::fishCollected == FishCollection::maxFish) {
+		RenderText("you found all the fish", 50, 50);
+	}
 
 	//flip the back and front buffers around. display on screen
 	swapChain->Present(0, 0);
