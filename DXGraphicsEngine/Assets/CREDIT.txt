@@ -1,6 +1,2 @@
-anglefish https://sketchfab.com/3d-models/fish-77730298c9c8481e9b54d98430e9723f
-basicfish https://sketchfab.com/3d-models/fish-animated-665ab73155a44d91908519d84e5fd002
-jellyfish https://sketchfab.com/3d-models/jelly-fish-spongebob-4227c0c46a1640ef9c61c455f7bc10f7#download
-manta ray https://sketchfab.com/3d-models/cartoon-manta-ray-animated-3f56886ab5fe4c7b8b151ea0974bf5b3#download
-squid https://sketchfab.com/3d-models/squid-410650f804a04f37820dfde80647ca41
-whale https://sketchfab.com/3d-models/cartoon-whale-8f34f0a775a54a3e80424f62bca2bdc1
+carp fish https://www.cgtrader.com/items/2976386/
+tailor fish https://www.cgtrader.com/items/2308164/download-page
