@@ -39,51 +39,49 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 
 	//get models and textures
 	Mesh mesh_cube{ renderer, "Assets/Models/cube.obj" };
+	Mesh mesh_fish{ renderer, "Assets/Models/fish.obj" };
+	Mesh mesh_bassfish{ renderer, "Assets/Models/bass.obj" };
 	Mesh mesh_carpfish{ renderer, "Assets/Models/carp.obj" };
 	Mesh mesh_tailorfish{ renderer, "Assets/Models/tailor.obj" };
-	//Mesh mesh_jellyfish{ renderer, "Assets/Models/jellyfish.obj" };
-	//Mesh mesh_mantaray{ renderer, "Assets/Models/mantaray.obj" };
-	//Mesh mesh_squid{ renderer, "Assets/Models/squid.obj" };
-	//Mesh mesh_whale{ renderer, "Assets/Models/whale.obj" };
+	Mesh mesh_goldfish{ renderer, "Assets/Models/goldfish.obj" };
 	Mesh mesh_grass{ renderer, "Assets/Models/grass.obj", true };
 	
 	Texture tex_skybox{ renderer, "Assets/Textures/Skybox/skybox02.dds", false, Texture::TextureType::Cubemap };
+	Texture tex_fish{ renderer, "Assets/Textures/fish.png", };
+	Texture tex_bassfish{ renderer, "Assets/Textures/bass.png", };
 	Texture tex_carpfish{ renderer, "Assets/Textures/carp.png" };
 	Texture tex_tailorfish{ renderer, "Assets/Textures/tailor.png" };
-	//Texture tex_jellyfish{ renderer, "Assets/Textures/jellyfish.png" };
-	//Texture tex_mantaray{ renderer, "Assets/Textures/mantaray.png" };
-	//Texture tex_squid{ renderer, "Assets/Textures/squid.png" };
-	//Texture tex_whale{ renderer, "Assets/Textures/whale.png" };
-	Texture tex_flower{ renderer, "Assets/Textures/flower.png", true };
+	Texture tex_goldfish{ renderer, "Assets/Textures/goldfish.png" };
+	Texture tex_yellowcoral{ renderer, "Assets/Textures/yellowcoral.png", true };
+	Texture tex_pinkcoral{ renderer, "Assets/Textures/pinkcoral.png", true };
 	
 	//make materials
 	MaterialLit mat_skybox{ "Lit Skybox", renderer, "Compiled Shaders/SkyboxVShader.cso", "Compiled Shaders/SkyboxFShader.cso", &tex_skybox };
-	MaterialLit mat_flower{ "Lit Flower", renderer, "Compiled Shaders/VertexShader.cso", "Compiled Shaders/FragmentShader.cso", &tex_flower };
-	MaterialLit mat_carpfish{ "Lit Angle Fish", renderer, "Compiled Shaders/VertexShader.cso", "Compiled Shaders/FragmentShader.cso", &tex_carpfish };
+	MaterialLit mat_yellowcoral{ "Lit Yellow Coral", renderer, "Compiled Shaders/VertexShader.cso", "Compiled Shaders/FragmentShader.cso", &tex_yellowcoral };
+	MaterialLit mat_pinkcoral{ "Lit Yellow Coral", renderer, "Compiled Shaders/VertexShader.cso", "Compiled Shaders/FragmentShader.cso", &tex_pinkcoral };
+	MaterialLit mat_fish{ "Lit Fish", renderer, "Compiled Shaders/VertexShader.cso", "Compiled Shaders/FragmentShader.cso", &tex_fish };
 
-	MaterialLit mat_shinytailorfish{ "Lit Basic Fish", renderer, "Compiled Shaders/ReflectiveVShader.cso", "Compiled Shaders/ReflectiveFShader.cso", &tex_tailorfish };
+	MaterialLit mat_shinybassfish{ "Lit Basic Fish", renderer, "Compiled Shaders/ReflectiveVShader.cso", "Compiled Shaders/ReflectiveFShader.cso", &tex_bassfish };
+	mat_shinybassfish.SetReflectionTexture(&tex_skybox);
+	MaterialLit mat_shinycarpfish{ "Lit Carp Fish", renderer, "Compiled Shaders/ReflectiveVShader.cso", "Compiled Shaders/ReflectiveFShader.cso", &tex_carpfish };
+	mat_shinycarpfish.SetReflectionTexture(&tex_skybox);
+	MaterialLit mat_shinytailorfish{ "Lit Tailor Fish", renderer, "Compiled Shaders/ReflectiveVShader.cso", "Compiled Shaders/ReflectiveFShader.cso", &tex_tailorfish };
 	mat_shinytailorfish.SetReflectionTexture(&tex_skybox);
-	//MaterialLit mat_shinyjellyfish{ "Lit Basic Fish", renderer, "Compiled Shaders/ReflectiveVShader.cso", "Compiled Shaders/ReflectiveFShader.cso", &tex_jellyfish };
-	//mat_shinyjellyfish.SetReflectionTexture(&tex_skybox);
-	//MaterialLit mat_shinymantaray{ "Lit Basic Fish", renderer, "Compiled Shaders/ReflectiveVShader.cso", "Compiled Shaders/ReflectiveFShader.cso", &tex_mantaray };
-	//mat_shinymantaray.SetReflectionTexture(&tex_skybox);
-	//MaterialLit mat_shinysquid{ "Lit Basic Fish", renderer, "Compiled Shaders/ReflectiveVShader.cso", "Compiled Shaders/ReflectiveFShader.cso", &tex_squid };
-	//mat_shinysquid.SetReflectionTexture(&tex_skybox);
-	//MaterialLit mat_shinywhale{ "Lit Basic Fish", renderer, "Compiled Shaders/ReflectiveVShader.cso", "Compiled Shaders/ReflectiveFShader.cso", &tex_whale };
-	//mat_shinywhale.SetReflectionTexture(&tex_skybox);
+	MaterialLit mat_shinygoldfish{ "Lit Basic Fish", renderer, "Compiled Shaders/ReflectiveVShader.cso", "Compiled Shaders/ReflectiveFShader.cso", &tex_goldfish };
+	mat_shinygoldfish.SetReflectionTexture(&tex_skybox);
 
 	//skybox object
 	GameObject obj_skybox{ "Skybox", &mesh_cube, &mat_skybox };
 	renderer.skyboxObject = &obj_skybox;
 
 	//make gameobjects (render transparent objects last!!)
-	GameObject objCarpFish{ "AngleFish", &mesh_carpfish, &mat_carpfish };
-	GameObject objTailorFish{ "BasicFish", &mesh_tailorfish, &mat_shinytailorfish };
-	//GameObject objJellyFish{ "BasicFish", &mesh_jellyfish, &mat_shinyjellyfish };
-	//GameObject objMantaRay{ "BasicFish", &mesh_mantaray, &mat_shinymantaray };
-	//GameObject objSquid{ "BasicFish", &mesh_squid, &mat_shinysquid };
-	//GameObject objWhale{ "BasicFish", &mesh_whale, &mat_shinywhale };
-	GameObject objFlower{ "Flower", &mesh_grass, &mat_flower };
+	GameObject objFish{ "Basic Fish", &mesh_fish, &mat_fish };
+	GameObject objBassFish{ "Bass Fish", &mesh_bassfish, &mat_shinybassfish };
+	GameObject objCarpFish{ "Carp Fish", &mesh_carpfish, &mat_shinycarpfish };
+	GameObject objTailorFish{ "Tailor Fish", &mesh_tailorfish, &mat_shinytailorfish };
+	GameObject objGoldFish{ "Gold Fish", &mesh_goldfish, &mat_shinygoldfish };
+	GameObject objYellowCoral{ "Yellow Coral", &mesh_grass, &mat_yellowcoral };
+	GameObject objPinkCoral{ "Pink Coral", &mesh_grass, &mat_pinkcoral };
 
 	//set lighting
 	renderer.directionalLights[0] = { DirectX::XMVECTOR{ 0.3f, 0.7f, 0.7f }, { 0, 0.8f, 0.75f }, true };
@@ -94,30 +92,38 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 	//set camera and gameobject positions
 	renderer.camera.transform.SetPosition({ 0, 0, -5 });
 
+	renderer.RegisterGameObject(&objFish);
+	objFish.transform.SetPosition({ -2, 0, 3, 1 });
+	objFish.transform.SetScale({ 0.7f, 0.7f, 0.7f, 0.7f });
+	objFish.transform.Rotate({ 0, 80, 0 });
+
+	renderer.RegisterGameObject(&objBassFish);
+	objBassFish.transform.SetPosition({ 3, 0, -2, 1 });
+	objBassFish.transform.SetScale({ 0.5f, 0.5f, 0.5f, 0.5f });
+	objBassFish.transform.Rotate({ 0, -60, 0 });
+
 	renderer.RegisterGameObject(&objCarpFish);
-	objCarpFish.transform.SetPosition({ -3, 0, 0, 1 });
+	objCarpFish.transform.SetPosition({ -4, 0, 6, 1 });
 	objCarpFish.transform.SetScale({3, 3, 3, 3});
+	objCarpFish.transform.Rotate({ 0, 50, 0 });
 
 	renderer.RegisterGameObject(&objTailorFish);
-	objTailorFish.transform.SetPosition({ 0, 0, 3, 1 });
+	objTailorFish.transform.SetPosition({ -1, 0, 0, 1 });
 	objTailorFish.transform.SetScale({ 2, 2, 2, 2 });
+	objTailorFish.transform.Rotate({ 0, -100, 0 });
 
-	//renderer.RegisterGameObject(&objJellyFish);
-	//objJellyFish.transform.SetPosition({ -3, 0, 3, 1 });
+	renderer.RegisterGameObject(&objGoldFish);
+	objGoldFish.transform.SetPosition({ 2, 0, -4, 1 });
+	objGoldFish.transform.SetScale({ 6, 6, 6, 6 });
+	objGoldFish.transform.Rotate({ 0, -80, 0 });
 
-	//renderer.RegisterGameObject(&objMantaRay);
-	//objMantaRay.transform.SetPosition({ 3, 0, 3, 1 });
-
-	//renderer.RegisterGameObject(&objSquid);
-	//objSquid.transform.SetPosition({ -3, 0, 6, 1 });
-
-	//renderer.RegisterGameObject(&objWhale);
-	//objWhale.transform.SetPosition({ 3, 0, 6, 1 });
-
-	renderer.RegisterGameObject(&objFlower);
-	objFlower.transform.SetPosition({ 0, 0, 7, 1 });
+	renderer.RegisterGameObject(&objYellowCoral);
+	objYellowCoral.transform.SetPosition({ 2, -4, 5, 1 });
+	renderer.RegisterGameObject(&objPinkCoral);
+	objPinkCoral.transform.SetPosition({ -1, -4, 4, 1 });
 
 	//game variables
+	float loopBoundaries = 10;
 	float deltaTime = 0.001f; //calculate delta time, i will do properly later
 	float moveSpeed = walkSpeed;
 
@@ -182,14 +188,43 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 				renderer.camera.transform.SetPosition({ 0, 0, -5 });
 			}
 
-
 			//camera collision
+			if (BoxCollider::BoxCollision(renderer.camera.transform, objFish.transform)) { FishCollection::CollectFish(objFish, renderer); }
+			if (BoxCollider::BoxCollision(renderer.camera.transform, objBassFish.transform)) { FishCollection::CollectFish(objBassFish, renderer); }
 			if (BoxCollider::BoxCollision(renderer.camera.transform, objCarpFish.transform)) { FishCollection::CollectFish(objCarpFish, renderer); }
-			if (BoxCollider::BoxCollision(renderer.camera.transform, objFlower.transform)) { FishCollection::CollectFish(objFlower, renderer); }
+			if (BoxCollider::BoxCollision(renderer.camera.transform, objTailorFish.transform)) { FishCollection::CollectFish(objTailorFish, renderer); }
+			if (BoxCollider::BoxCollision(renderer.camera.transform, objGoldFish.transform)) { FishCollection::CollectFish(objGoldFish, renderer); }
 
-			objTailorFish.transform.Rotate({ 0, -deltaTime * 0.5f, 0 });
-			objCarpFish.transform.Rotate({ 0, -deltaTime, 0 });
-			objFlower.transform.Rotate({ 0, -deltaTime, 0 });
+			objFish.transform.Translate(
+				DirectX::XMVectorScale(objFish.transform.GetForward(), deltaTime));
+			objBassFish.transform.Translate(
+				DirectX::XMVectorScale(objBassFish.transform.GetForward(), deltaTime));
+			objCarpFish.transform.Translate(
+				DirectX::XMVectorScale(objCarpFish.transform.GetForward(), deltaTime));
+			objTailorFish.transform.Translate(
+				DirectX::XMVectorScale(objTailorFish.transform.GetForward(), deltaTime));
+			objGoldFish.transform.Translate(
+				DirectX::XMVectorScale(objGoldFish.transform.GetForward(), deltaTime));
+
+			objYellowCoral.transform.Rotate({ 0, -deltaTime/2, 0 });
+			objPinkCoral.transform.Rotate({ 0, -deltaTime/2, 0 });
+
+			//object transform boundaries are looping at 10, 10
+			for (GameObject* obj : renderer.gameObjects) {
+				float posx = DirectX::XMVectorGetX(obj->transform.GetPosition());
+				float posz = DirectX::XMVectorGetZ(obj->transform.GetPosition());
+				
+				//check x boundary
+				if (posx > loopBoundaries) { posx = -loopBoundaries; }
+				else if (posx < -loopBoundaries) { posx = loopBoundaries; }
+
+				//check z boundary
+				if (posz > loopBoundaries) { posz = -loopBoundaries; }
+				else if (posz < -loopBoundaries) { posz = loopBoundaries; }
+
+				//update position
+				obj->transform.SetPosition({ posx, DirectX::XMVectorGetY(obj->transform.GetPosition()), posz});
+			}
 
 			renderer.RenderFrame();
 		}

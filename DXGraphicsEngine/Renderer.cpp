@@ -300,9 +300,6 @@ void Renderer::RenderFrame() {
 
 	CBuffer_PerObject cBufferPerObjectData = {};
 
-	////////create the transform data stuff
-	//////CBuffer_Lighting cBufferLightingData;
-	//////cBufferPerObjectData.WVP = DirectX::XMMatrixIdentity();
 	DirectX::XMMATRIX view = camera.GetViewMatrix();
 	DirectX::XMMATRIX projection = camera.GetProjectionMatrix(window.GetWidth(), window.GetHeight());
 
@@ -312,39 +309,8 @@ void Renderer::RenderFrame() {
 		cBufferPerObjectData.world = world;
 		cBufferPerObjectData.WVP = world * view * projection;
 
-		////////lighting
-		////////ambient light
-		//////cBufferLightingData.ambientLightColour = ambientLightColour;
-		////////directional lights
-		//////for (size_t i = 0; i < MAX_DIRECTIONAL_LIGHTS; i++) {
-		//////	cBufferLightingData.directionalLights[i].enabled = directionalLights[i].enabled;
-
-		//////	//if disabled then skip to next light
-		//////	if (!directionalLights[i].enabled) { continue; }
-
-		//////	cBufferLightingData.directionalLights[i].colour = directionalLights[i].colour;
-		//////	XMMATRIX transpose = XMMatrixTranspose(world);
-		//////	cBufferLightingData.directionalLights[i].sourcePosition = XMVector3Transform(directionalLights[i].sourcePosition, transpose);
-		//////}
-		////////point lights
-		//////for (size_t i = 0; i < MAX_POINT_LIGHTS; i++) {
-		//////	cBufferLightingData.pointLights[i].enabled = pointLights[i].enabled;
-
-		//////	//if disabled then skip to next light
-		//////	if (!pointLights[i].enabled) { continue; }
-
-		//////	XMMATRIX inverse = XMMatrixInverse(nullptr, world);
-
-		//////	cBufferLightingData.pointLights[i].position = XMVector3Transform(pointLights[i].position, inverse);
-		//////	cBufferLightingData.pointLights[i].colour = pointLights[i].colour;
-		//////	cBufferLightingData.pointLights[i].strength = pointLights[i].strength;
-		//////}
-
 		devCon->UpdateSubresource(cBuffer_PerObject, NULL, NULL, &cBufferPerObjectData, NULL, NULL);
 		devCon->VSSetConstantBuffers(12, 1, &cBuffer_PerObject);
-
-		//////devCon->UpdateSubresource(cBuffer_Lighting, NULL, NULL, &cBufferLightingData, NULL, NULL);
-		//////devCon->VSSetConstantBuffers(13, 1, &cBuffer_Lighting);
 
 		devCon->RSSetState(obj->mesh->isDoubleSided ? rasterizerCullNone : rasterizerCullBack);
 		devCon->OMSetBlendState(obj->material->GetTexture()->isTransparent ? blendTransparent : blendOpaque, 0, 0xffffffff);
