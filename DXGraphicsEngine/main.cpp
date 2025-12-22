@@ -8,7 +8,6 @@
 #include "MaterialLit.h"
 #include "GameObject.h"
 #include "BoxCollider.h"
-#include "FishCollection.h"
 #include "Debug.h"
 
 const float walkSpeed = 1;
@@ -27,9 +26,6 @@ void OpenConsole() {
 		std::cout << "Hello Side Console! :)" << std::endl;
 	}
 }
-
-//declare static vars from other classes
-int FishCollection::fishCollected = 0;
 
 //window main
 int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _In_ LPSTR lpCmdLine, _In_ int  nCmdShow) {
@@ -113,7 +109,7 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 	objTailorFish.transform.Rotate({ 0, -100, 0 });
 
 	renderer.RegisterGameObject(&objGoldFish);
-	objGoldFish.transform.SetPosition({ 2, 0, -4, 1 });
+	objGoldFish.transform.SetPosition({ 2, 0, 6, 1 });
 	objGoldFish.transform.SetScale({ 6, 6, 6, 6 });
 	objGoldFish.transform.Rotate({ 0, -80, 0 });
 
@@ -193,11 +189,11 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 			}
 
 			//camera collision
-			if (BoxCollider::BoxCollision(renderer.camera.transform, objFish.transform)) { renderer.RemoveGameObject(&objFish); objFish.transform.SetScale({ 0, 0, 0 }); FishCollection::fishCollected++; }
-			if (BoxCollider::BoxCollision(renderer.camera.transform, objBassFish.transform)) { renderer.RemoveGameObject(&objBassFish); objBassFish.transform.SetScale({ 0, 0, 0 }); FishCollection::fishCollected++;}
-			if (BoxCollider::BoxCollision(renderer.camera.transform, objCarpFish.transform)) { renderer.RemoveGameObject(&objCarpFish); objCarpFish.transform.SetScale({ 0, 0, 0 }); FishCollection::fishCollected++; }
-			if (BoxCollider::BoxCollision(renderer.camera.transform, objTailorFish.transform)) { renderer.RemoveGameObject(&objTailorFish); objTailorFish.transform.SetScale({ 0, 0, 0 }); FishCollection::fishCollected++; }
-			if (BoxCollider::BoxCollision(renderer.camera.transform, objGoldFish.transform)) { renderer.RemoveGameObject(&objGoldFish); objGoldFish.transform.SetScale({ 0, 0, 0 }); FishCollection::fishCollected++; }
+			if (BoxCollider::BoxCollision(renderer.camera.transform, objFish.transform)) { renderer.RemoveGameObject(&objFish); objFish.transform.SetScale({ 0, 0, 0 }); }
+			if (BoxCollider::BoxCollision(renderer.camera.transform, objBassFish.transform)) { renderer.RemoveGameObject(&objBassFish); objBassFish.transform.SetScale({ 0, 0, 0 }); }
+			if (BoxCollider::BoxCollision(renderer.camera.transform, objCarpFish.transform)) { renderer.RemoveGameObject(&objCarpFish); objCarpFish.transform.SetScale({ 0, 0, 0 }); }
+			if (BoxCollider::BoxCollision(renderer.camera.transform, objTailorFish.transform)) { renderer.RemoveGameObject(&objTailorFish); objTailorFish.transform.SetScale({ 0, 0, 0 }); }
+			if (BoxCollider::BoxCollision(renderer.camera.transform, objGoldFish.transform)) { renderer.RemoveGameObject(&objGoldFish); objGoldFish.transform.SetScale({ 0, 0, 0 }); }
 
 			objFish.transform.Translate(
 				DirectX::XMVectorScale(objFish.transform.GetForward(), deltaTime));
@@ -235,13 +231,12 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 
 				//object collision if fish
 				if (BoxCollider::BoxCollision(renderer.camera.transform, obj->transform) 
-					&& obj->GetName().find("Fish")) {
+					&& obj->GetName().find("Fish") != std::string::npos) {
 					renderer.RemoveGameObject(obj); 
 				}
 			}
 
 			renderer.RenderFrame();
-			LOG(std::to_string(FishCollection::fishCollected));
 		}
 	}
 

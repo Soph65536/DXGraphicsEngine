@@ -107,9 +107,6 @@
     <ClInclude Include="MaterialLit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FishCollection.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VertexShader.hlsl" />

@@ -6,7 +6,6 @@
 #include "GameObject.h"
 #include "ShaderLoading.h"
 #include "ModelLoader.h"
-#include "FishCollection.h"
 #include "Debug.h"
 
 #include <d3d11.h>
@@ -299,6 +298,8 @@ void Renderer::RenderFrame() {
 	DirectX::XMMATRIX view = camera.GetViewMatrix();
 	DirectX::XMMATRIX projection = camera.GetProjectionMatrix(window.GetWidth(), window.GetHeight());
 
+	bool foundAllFish = true;
+
 	for (auto obj : gameObjects) {
 		//transform
 		XMMATRIX world = obj->transform.GetWorldMatrix();
@@ -315,9 +316,14 @@ void Renderer::RenderFrame() {
 		obj->material->UpdateMaterial(obj);
 		obj->material->Bind();
 		obj->mesh->Render();
+
+		//foundallfish check
+		if (obj->GetName().find("Fish") != std::string::npos) { foundAllFish = false; LOG(obj->GetName()); }
 	}
 
-	//RenderText((char*)&(std::to_string(FishCollection::fishCollected)), 50, 50);
+	if (foundAllFish) {
+		RenderText("all fish found", 50, 50);
+	}
 
 	//flip the back and front buffers around. display on screen
 	swapChain->Present(0, 0);
