@@ -54,6 +54,9 @@ void Renderer::RemoveGameObject(GameObject* e) {
 	auto foundEntity = std::find(gameObjects.begin(), gameObjects.end(), e);
 	if (foundEntity != gameObjects.end()) {
 		gameObjects.erase(foundEntity);
+
+		//set scale to 0 so no more collision
+		e->transform.SetScale({ 0, 0, 0 });
 	}
 	//note: will affect index based iterating
 }
@@ -190,13 +193,6 @@ void Renderer::InitGraphics() {
 		return;
 	}
 
-	////create the lighting constant buffer (same settings as above so we just need to change the size)
-	//cbd.ByteWidth = sizeof(CBuffer_Lighting);
-	//if (FAILED(dev->CreateBuffer(&cbd, NULL, &cBuffer_Lighting))) {
-	//	LOG("Failed to create constant buffer lighting");
-	//	return;
-	//}
-
 	font = new DirectX::SpriteFont(dev, L"Assets/Fonts/myfile.Spritefont");
 	spriteBatch = new DirectX::SpriteBatch(devCon);
 }
@@ -321,9 +317,7 @@ void Renderer::RenderFrame() {
 		obj->mesh->Render();
 	}
 
-	if (FishCollection::fishCollected == FishCollection::maxFish) {
-		RenderText("you found all the fish", 50, 50);
-	}
+	//RenderText((char*)&(std::to_string(FishCollection::fishCollected)), 50, 50);
 
 	//flip the back and front buffers around. display on screen
 	swapChain->Present(0, 0);
@@ -334,8 +328,6 @@ void Renderer::Clean() {
 	delete font;
 	delete spriteBatch;
 	if (cBuffer_PerObject) cBuffer_PerObject->Release();
-	//if (iBuffer) iBuffer->Release();
-	//if (vBuffer) vBuffer->Release();
 	if (depthBuffer) depthBuffer->Release();
 	if (backBuffer) backBuffer->Release();
 	if (swapChain) swapChain->Release();

@@ -11,8 +11,8 @@
 #include "FishCollection.h"
 #include "Debug.h"
 
-const float walkSpeed = 0.001f;
-const float runSpeed = 0.003f;
+const float walkSpeed = 1;
+const float runSpeed = 3;
 
 //console debug stuff
 void OpenConsole() {
@@ -124,8 +124,9 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 
 	//game variables
 	float loopBoundaries = 10;
-	float deltaTime = 0.001f; //calculate delta time, i will do properly later
-	float moveSpeed = walkSpeed;
+	float deltaTime = CLOCKS_PER_SEC; 
+	deltaTime /= 1000000;
+	float moveSpeed = walkSpeed * deltaTime;
 
 	//declare keyboard tracker
 	DirectX::Keyboard::KeyboardStateTracker kbTracker;
@@ -143,6 +144,9 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 			if (msg.message == WM_QUIT) break; //break out of the loop if get quit message
 		}
 		else {
+			//get current time
+			clock_t endOfFrameTime = clock() + CLOCKS_PER_SEC;
+
 			//get keyboard input state
 			auto kbState = DirectX::Keyboard::Get().GetState();
 			kbTracker.Update(kbState);
@@ -152,11 +156,11 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 			}
 
 			if (kbTracker.pressed.LeftShift) {
-				moveSpeed = runSpeed;
+				moveSpeed = runSpeed * deltaTime;
 			}
 
 			if (kbTracker.released.LeftShift) {
-				moveSpeed = walkSpeed;
+				moveSpeed = walkSpeed * deltaTime;
 			}
 
 			//keyboard camera movement
@@ -189,11 +193,11 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 			}
 
 			//camera collision
-			if (BoxCollider::BoxCollision(renderer.camera.transform, objFish.transform)) { FishCollection::CollectFish(objFish, renderer); }
-			if (BoxCollider::BoxCollision(renderer.camera.transform, objBassFish.transform)) { FishCollection::CollectFish(objBassFish, renderer); }
-			if (BoxCollider::BoxCollision(renderer.camera.transform, objCarpFish.transform)) { FishCollection::CollectFish(objCarpFish, renderer); }
-			if (BoxCollider::BoxCollision(renderer.camera.transform, objTailorFish.transform)) { FishCollection::CollectFish(objTailorFish, renderer); }
-			if (BoxCollider::BoxCollision(renderer.camera.transform, objGoldFish.transform)) { FishCollection::CollectFish(objGoldFish, renderer); }
+			if (BoxCollider::BoxCollision(renderer.camera.transform, objFish.transform)) { renderer.RemoveGameObject(&objFish); objFish.transform.SetScale({ 0, 0, 0 }); FishCollection::fishCollected++; }
+			if (BoxCollider::BoxCollision(renderer.camera.transform, objBassFish.transform)) { renderer.RemoveGameObject(&objBassFish); objBassFish.transform.SetScale({ 0, 0, 0 }); FishCollection::fishCollected++;}
+			if (BoxCollider::BoxCollision(renderer.camera.transform, objCarpFish.transform)) { renderer.RemoveGameObject(&objCarpFish); objCarpFish.transform.SetScale({ 0, 0, 0 }); FishCollection::fishCollected++; }
+			if (BoxCollider::BoxCollision(renderer.camera.transform, objTailorFish.transform)) { renderer.RemoveGameObject(&objTailorFish); objTailorFish.transform.SetScale({ 0, 0, 0 }); FishCollection::fishCollected++; }
+			if (BoxCollider::BoxCollision(renderer.camera.transform, objGoldFish.transform)) { renderer.RemoveGameObject(&objGoldFish); objGoldFish.transform.SetScale({ 0, 0, 0 }); FishCollection::fishCollected++; }
 
 			objFish.transform.Translate(
 				DirectX::XMVectorScale(objFish.transform.GetForward(), deltaTime));
@@ -213,8 +217,8 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 			objYellowCoral.transform.Rotate({ 0, -deltaTime/2, 0 });
 			objPinkCoral.transform.Rotate({ 0, -deltaTime/2, 0 });
 
-			//object transform boundaries are looping at 10, 10
 			for (GameObject* obj : renderer.gameObjects) {
+				//object transform boundaries are looping at 10, 10
 				float posx = DirectX::XMVectorGetX(obj->transform.GetPosition());
 				float posz = DirectX::XMVectorGetZ(obj->transform.GetPosition());
 				
@@ -228,9 +232,16 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 
 				//update position
 				obj->transform.SetPosition({ posx, DirectX::XMVectorGetY(obj->transform.GetPosition()), posz});
+
+				//object collision if fish
+				if (BoxCollider::BoxCollision(renderer.camera.transform, obj->transform) 
+					&& obj->GetName().find("Fish")) {
+					renderer.RemoveGameObject(obj); 
+				}
 			}
 
 			renderer.RenderFrame();
+			LOG(std::to_string(FishCollection::fishCollected));
 		}
 	}
 
