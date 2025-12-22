@@ -115,6 +115,8 @@
     <FxCompile Include="SkyboxFShader.hlsl" />
     <FxCompile Include="ReflectiveVShader.hlsl" />
     <FxCompile Include="ReflectiveFShader.hlsl" />
+    <FxCompile Include="CoolVShader.hlsl" />
+    <FxCompile Include="CoolVShader2.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -57,7 +57,7 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 	MaterialLit mat_pinkcoral{ "Lit Yellow Coral", renderer, "Compiled Shaders/VertexShader.cso", "Compiled Shaders/FragmentShader.cso", &tex_pinkcoral };
 	MaterialLit mat_fish{ "Lit Fish", renderer, "Compiled Shaders/VertexShader.cso", "Compiled Shaders/FragmentShader.cso", &tex_fish };
 
-	MaterialLit mat_shinybassfish{ "Lit Basic Fish", renderer, "Compiled Shaders/ReflectiveVShader.cso", "Compiled Shaders/ReflectiveFShader.cso", &tex_bassfish };
+	MaterialLit mat_shinybassfish{ "Lit Bass Fish", renderer, "Compiled Shaders/ReflectiveVShader.cso", "Compiled Shaders/ReflectiveFShader.cso", &tex_bassfish };
 	mat_shinybassfish.SetReflectionTexture(&tex_skybox);
 	MaterialLit mat_shinycarpfish{ "Lit Carp Fish", renderer, "Compiled Shaders/ReflectiveVShader.cso", "Compiled Shaders/ReflectiveFShader.cso", &tex_carpfish };
 	mat_shinycarpfish.SetReflectionTexture(&tex_skybox);
@@ -65,6 +65,10 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 	mat_shinytailorfish.SetReflectionTexture(&tex_skybox);
 	MaterialLit mat_shinygoldfish{ "Lit Basic Fish", renderer, "Compiled Shaders/ReflectiveVShader.cso", "Compiled Shaders/ReflectiveFShader.cso", &tex_goldfish };
 	mat_shinygoldfish.SetReflectionTexture(&tex_skybox);
+
+	MaterialLit mat_rainbowfish{ "Lit Rainbow Fish", renderer, "Compiled Shaders/CoolVShader2.cso", "Compiled Shaders/FragmentShader.cso", &tex_fish };
+	MaterialLit mat_coolbassfish{ "Lit Cool Bass Fish", renderer, "Compiled Shaders/CoolVShader.cso", "Compiled Shaders/ReflectiveFShader.cso", &tex_bassfish };
+	mat_coolbassfish.SetReflectionTexture(&tex_skybox);
 
 	//skybox object
 	GameObject obj_skybox{ "Skybox", &mesh_cube, &mat_skybox };
@@ -76,6 +80,9 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 	GameObject objCarpFish{ "Carp Fish", &mesh_carpfish, &mat_shinycarpfish };
 	GameObject objTailorFish{ "Tailor Fish", &mesh_tailorfish, &mat_shinytailorfish };
 	GameObject objGoldFish{ "Gold Fish", &mesh_goldfish, &mat_shinygoldfish };
+	GameObject objRainbowFish{ "Rainbow Fish", &mesh_fish, &mat_rainbowfish };
+	GameObject objCoolBassFish{ "Cool Bass Fish", &mesh_bassfish, &mat_coolbassfish };
+
 	GameObject objYellowCoral{ "Yellow Coral", &mesh_grass, &mat_yellowcoral };
 	GameObject objPinkCoral{ "Pink Coral", &mesh_grass, &mat_pinkcoral };
 
@@ -89,29 +96,39 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 	renderer.camera.transform.SetPosition({ 0, 0, -5 });
 
 	renderer.RegisterGameObject(&objFish);
-	objFish.transform.SetPosition({ -2, 0, 3, 1 });
-	objFish.transform.SetScale({ 0.7f, 0.7f, 0.7f, 0.7f });
 	objFish.transform.Rotate({ 0, 80, 0 });
+	objFish.transform.SetScale({ 0.7f, 0.7f, 0.7f, 0.7f });
+	objFish.transform.SetPosition({ -2, 0, -5, 1 });
 
 	renderer.RegisterGameObject(&objBassFish);
-	objBassFish.transform.SetPosition({ 3, 0, -2, 1 });
-	objBassFish.transform.SetScale({ 0.5f, 0.5f, 0.5f, 0.5f });
 	objBassFish.transform.Rotate({ 0, -60, 0 });
+	objBassFish.transform.SetScale({ 0.5f, 0.5f, 0.5f, 0.5f });
+	objBassFish.transform.SetPosition({ 3, 0, -7, 1 });
 
 	renderer.RegisterGameObject(&objCarpFish);
-	objCarpFish.transform.SetPosition({ -4, 0, 6, 1 });
-	objCarpFish.transform.SetScale({3, 3, 3, 3});
 	objCarpFish.transform.Rotate({ 0, 50, 0 });
+	objCarpFish.transform.SetScale({3, 3, 3, 3});
+	objCarpFish.transform.SetPosition({ -6, 0, 6, 1 });
 
 	renderer.RegisterGameObject(&objTailorFish);
-	objTailorFish.transform.SetPosition({ -1, 0, 0, 1 });
-	objTailorFish.transform.SetScale({ 2, 2, 2, 2 });
 	objTailorFish.transform.Rotate({ 0, -100, 0 });
+	objTailorFish.transform.SetScale({ 2, 2, 2, 2 });
+	objTailorFish.transform.SetPosition({ -1, 0, 0, 1 });
 
 	renderer.RegisterGameObject(&objGoldFish);
-	objGoldFish.transform.SetPosition({ 2, 0, 6, 1 });
-	objGoldFish.transform.SetScale({ 6, 6, 6, 6 });
 	objGoldFish.transform.Rotate({ 0, -80, 0 });
+	objGoldFish.transform.SetScale({ 6, 6, 6, 6 });
+	objGoldFish.transform.SetPosition({ 2, 0, 6, 1 });
+
+	renderer.RegisterGameObject(&objRainbowFish);
+	objRainbowFish.transform.Rotate({ 0, 80, 0 });
+	objRainbowFish.transform.SetScale({ 0.7f, 0.7f, 0.7f, 0.7f });
+	objRainbowFish.transform.SetPosition({ 3, 0, -9, 1 });
+
+	renderer.RegisterGameObject(&objCoolBassFish);
+	objCoolBassFish.transform.Rotate({ 0, -60, 0 });
+	objCoolBassFish.transform.SetScale({ 0.5f, 0.5f, 0.5f, 0.5f });
+	objCoolBassFish.transform.SetPosition({ -3, 0, 9, 1 });
 
 	renderer.RegisterGameObject(&objYellowCoral);
 	objYellowCoral.transform.SetPosition({ 2, -4, 5, 1 });
