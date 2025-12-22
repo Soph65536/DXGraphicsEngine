@@ -46,7 +46,7 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 	Mesh mesh_goldfish{ renderer, "Assets/Models/goldfish.obj" };
 	Mesh mesh_grass{ renderer, "Assets/Models/grass.obj", true };
 	
-	Texture tex_skybox{ renderer, "Assets/Textures/Skybox/skybox02.dds", false, Texture::TextureType::Cubemap };
+	Texture tex_skybox{ renderer, "Assets/Textures/Skybox/retro_skyboxes_pack/Sinister Ocean/vz_sinister_ocean_cubemap_ue.dds", false, Texture::TextureType::Cubemap };
 	Texture tex_fish{ renderer, "Assets/Textures/fish.png", };
 	Texture tex_bassfish{ renderer, "Assets/Textures/bass.png", };
 	Texture tex_carpfish{ renderer, "Assets/Textures/carp.png" };
@@ -197,14 +197,18 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 
 			objFish.transform.Translate(
 				DirectX::XMVectorScale(objFish.transform.GetForward(), deltaTime));
+			objFish.transform.Rotate({ 0, deltaTime/8, 0 });
 			objBassFish.transform.Translate(
 				DirectX::XMVectorScale(objBassFish.transform.GetForward(), deltaTime));
+			objBassFish.transform.Rotate({ 0, deltaTime/5, cos(-deltaTime) / 1000 });
 			objCarpFish.transform.Translate(
 				DirectX::XMVectorScale(objCarpFish.transform.GetForward(), deltaTime));
+			objCarpFish.transform.Rotate({ 0, -deltaTime/8, cos(deltaTime) / 5000 });
 			objTailorFish.transform.Translate(
 				DirectX::XMVectorScale(objTailorFish.transform.GetForward(), deltaTime));
 			objGoldFish.transform.Translate(
 				DirectX::XMVectorScale(objGoldFish.transform.GetForward(), deltaTime));
+			objGoldFish.transform.Rotate({ 0, -deltaTime, sin(deltaTime) });
 
 			objYellowCoral.transform.Rotate({ 0, -deltaTime/2, 0 });
 			objPinkCoral.transform.Rotate({ 0, -deltaTime/2, 0 });
