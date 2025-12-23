@@ -70,6 +70,10 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 	MaterialLit mat_rainbowfish{ "Lit Rainbow Fish", renderer, "Compiled Shaders/CustomVShader2.cso", "Compiled Shaders/ReflectiveFShader.cso", &tex_fish };
 	MaterialLit mat_coolbassfish{ "Lit Cool Bass Fish", renderer, "Compiled Shaders/CustomVShader1.cso", "Compiled Shaders/ReflectiveFShader.cso", &tex_bassfish };
 	mat_coolbassfish.SetReflectionTexture(&tex_skybox);
+	MaterialLit mat_invertcarpfish{ "Lit Carp Fish", renderer, "Compiled Shaders/ReflectiveVShader.cso", "Compiled Shaders/CustomFShader1.cso", &tex_carpfish };
+	mat_shinycarpfish.SetReflectionTexture(&tex_skybox);
+	MaterialLit mat_weirdshadowtailorfish{ "Lit Tailor Fish", renderer, "Compiled Shaders/ReflectiveVShader.cso", "Compiled Shaders/CustomFShader2.cso", &tex_tailorfish };
+	mat_shinytailorfish.SetReflectionTexture(&tex_skybox);
 
 	//skybox object
 	GameObject obj_skybox{ "Skybox", &mesh_cube, &mat_skybox };
@@ -83,9 +87,13 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 	GameObject objGoldFish{ "Gold Fish", &mesh_goldfish, &mat_shinygoldfish };
 	GameObject objRainbowFish{ "Rainbow Fish", &mesh_fish, &mat_rainbowfish };
 	GameObject objCoolBassFish{ "Cool Bass Fish", &mesh_bassfish, &mat_coolbassfish };
+	GameObject objInvertCarpFish{ "Invert Carp Fish", &mesh_carpfish, &mat_invertcarpfish };
+	GameObject objWeirdShadowTailorFish{ "Weird Shadow Tailor Fish", &mesh_tailorfish, &mat_weirdshadowtailorfish };
 
-	GameObject objYellowCoral{ "Yellow Coral", &mesh_grass, &mat_yellowcoral };
-	GameObject objPinkCoral{ "Pink Coral", &mesh_grass, &mat_pinkcoral };
+	GameObject objYellowCoral1{ "Yellow Coral", &mesh_grass, &mat_yellowcoral };
+	GameObject objYellowCoral2{ "Yellow Coral", &mesh_grass, &mat_yellowcoral };
+	GameObject objPinkCoral1{ "Pink Coral", &mesh_grass, &mat_pinkcoral };
+	GameObject objPinkCoral2{ "Pink Coral", &mesh_grass, &mat_pinkcoral };
 
 	//set lighting
 	renderer.directionalLights[0] = { DirectX::XMVECTOR{ 0.3f, 0.7f, 0.7f }, { 0, 0.8f, 0.75f }, true };
@@ -121,17 +129,29 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 	renderer.RegisterGameObject(&objRainbowFish);
 	objRainbowFish.transform.Rotate({ 0, 80, 0 });
 	objRainbowFish.transform.SetScale({ 0.7f, 0.7f, 0.7f, 0.7f });
-	objRainbowFish.transform.SetPosition({ 3, 0, -9, 1 });
+	objRainbowFish.transform.SetPosition({ 3, 1, -9, 1 });
 
 	renderer.RegisterGameObject(&objCoolBassFish);
 	objCoolBassFish.transform.Rotate({ 0, -60, 0 });
 	objCoolBassFish.transform.SetScale({ 0.5f, 0.5f, 0.5f, 0.5f });
-	objCoolBassFish.transform.SetPosition({ -3, 0, 9, 1 });
+	objCoolBassFish.transform.SetPosition({ -3, 1, 9, 1 });
 
-	renderer.RegisterGameObject(&objYellowCoral);
-	objYellowCoral.transform.SetPosition({ 2, -4, 5, 1 });
-	renderer.RegisterGameObject(&objPinkCoral);
-	objPinkCoral.transform.SetPosition({ -1, -4, 4, 1 });
+	renderer.RegisterGameObject(&objInvertCarpFish);
+	objInvertCarpFish.transform.Rotate({ 0, 50, 0 });
+	objInvertCarpFish.transform.SetPosition({ 9, -1, -3, 1 });
+
+	renderer.RegisterGameObject(&objWeirdShadowTailorFish);
+	objWeirdShadowTailorFish.transform.Rotate({ 0, -100, 0 });
+	objWeirdShadowTailorFish.transform.SetPosition({ -9, -1, 3, 1 });
+
+	renderer.RegisterGameObject(&objYellowCoral1);
+	objYellowCoral1.transform.SetPosition({ 2, -4, 5, 1 });
+	renderer.RegisterGameObject(&objYellowCoral2);
+	objYellowCoral2.transform.SetPosition({ -3, -4, -1, 1 });
+	renderer.RegisterGameObject(&objPinkCoral1);
+	objPinkCoral1.transform.SetPosition({ -1, -4, 4, 1 });
+	renderer.RegisterGameObject(&objPinkCoral2);
+	objPinkCoral2.transform.SetPosition({ 1, -4, -2, 1 });
 
 	//game variables
 	float loopBoundaries = 10;
@@ -203,13 +223,6 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 				renderer.camera.transform.SetPosition({ 0, 0, -5 });
 			}
 
-			//camera collision
-			if (BoxCollider::BoxCollision(renderer.camera.transform, objFish.transform)) { renderer.RemoveGameObject(&objFish); objFish.transform.SetScale({ 0, 0, 0 }); }
-			if (BoxCollider::BoxCollision(renderer.camera.transform, objBassFish.transform)) { renderer.RemoveGameObject(&objBassFish); objBassFish.transform.SetScale({ 0, 0, 0 }); }
-			if (BoxCollider::BoxCollision(renderer.camera.transform, objCarpFish.transform)) { renderer.RemoveGameObject(&objCarpFish); objCarpFish.transform.SetScale({ 0, 0, 0 }); }
-			if (BoxCollider::BoxCollision(renderer.camera.transform, objTailorFish.transform)) { renderer.RemoveGameObject(&objTailorFish); objTailorFish.transform.SetScale({ 0, 0, 0 }); }
-			if (BoxCollider::BoxCollision(renderer.camera.transform, objGoldFish.transform)) { renderer.RemoveGameObject(&objGoldFish); objGoldFish.transform.SetScale({ 0, 0, 0 }); }
-
 			objFish.transform.Translate(
 				DirectX::XMVectorScale(objFish.transform.GetForward(), deltaTime));
 			objFish.transform.Rotate({ 0, deltaTime/8, 0 });
@@ -224,9 +237,19 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 			objGoldFish.transform.Translate(
 				DirectX::XMVectorScale(objGoldFish.transform.GetForward(), deltaTime));
 			objGoldFish.transform.Rotate({ 0, -deltaTime, sin(deltaTime) });
+			objRainbowFish.transform.Translate(
+				DirectX::XMVectorScale(objRainbowFish.transform.GetForward(), deltaTime));
+			objCoolBassFish.transform.Translate(
+				DirectX::XMVectorScale(objCoolBassFish.transform.GetForward(), deltaTime));
+			objInvertCarpFish.transform.Translate(
+				DirectX::XMVectorScale(objInvertCarpFish.transform.GetForward(), deltaTime));
+			objWeirdShadowTailorFish.transform.Translate(
+				DirectX::XMVectorScale(objWeirdShadowTailorFish.transform.GetForward(), deltaTime));
 
-			objYellowCoral.transform.Rotate({ 0, -deltaTime/2, 0 });
-			objPinkCoral.transform.Rotate({ 0, -deltaTime/2, 0 });
+			objYellowCoral1.transform.Rotate({ 0, -deltaTime/2, 0 });
+			objYellowCoral2.transform.Rotate({ 0, -deltaTime / 2, 0 });
+			objPinkCoral1.transform.Rotate({ 0, -deltaTime/2, 0 });
+			objPinkCoral2.transform.Rotate({ 0, -deltaTime / 2, 0 });
 
 			for (GameObject* obj : renderer.gameObjects) {
 				//object transform boundaries are looping at 10, 10
