@@ -24,12 +24,6 @@ struct CBuffer_PerFrame {
 	float padding;
 };
 
-//struct CBuffer_Lighting {
-//	DirectX::XMVECTOR ambientLightColour = { 1, 1, 1 };
-//	DirectionalLight directionalLights[MAX_DIRECTIONAL_LIGHTS];
-//	PointLight pointLights[MAX_POINT_LIGHTS];
-//};
-
 Renderer::Renderer(Window& inWindow)
 	: window(inWindow) {
 
@@ -239,9 +233,6 @@ void Renderer::InitBlendModes() {
 }
 
 void Renderer::RenderText(const char* text, int x, int y) {
-	////get current depth stencil
-	//ID3D11DepthStencilState* depthState;
-	//devCon->OMGetDepthStencilState(&depthState, 0);
 
 	//draw text
 	spriteBatch->Begin();

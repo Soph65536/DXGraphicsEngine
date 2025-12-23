@@ -65,9 +65,10 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 	mat_shinytailorfish.SetReflectionTexture(&tex_skybox);
 	MaterialLit mat_shinygoldfish{ "Lit Basic Fish", renderer, "Compiled Shaders/ReflectiveVShader.cso", "Compiled Shaders/ReflectiveFShader.cso", &tex_goldfish };
 	mat_shinygoldfish.SetReflectionTexture(&tex_skybox);
+	mat_shinygoldfish.reflectiveness = 0.4f;
 
-	MaterialLit mat_rainbowfish{ "Lit Rainbow Fish", renderer, "Compiled Shaders/CoolVShader2.cso", "Compiled Shaders/FragmentShader.cso", &tex_fish };
-	MaterialLit mat_coolbassfish{ "Lit Cool Bass Fish", renderer, "Compiled Shaders/CoolVShader.cso", "Compiled Shaders/ReflectiveFShader.cso", &tex_bassfish };
+	MaterialLit mat_rainbowfish{ "Lit Rainbow Fish", renderer, "Compiled Shaders/CustomVShader2.cso", "Compiled Shaders/ReflectiveFShader.cso", &tex_fish };
+	MaterialLit mat_coolbassfish{ "Lit Cool Bass Fish", renderer, "Compiled Shaders/CustomVShader1.cso", "Compiled Shaders/ReflectiveFShader.cso", &tex_bassfish };
 	mat_coolbassfish.SetReflectionTexture(&tex_skybox);
 
 	//skybox object
@@ -107,17 +108,14 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 
 	renderer.RegisterGameObject(&objCarpFish);
 	objCarpFish.transform.Rotate({ 0, 50, 0 });
-	objCarpFish.transform.SetScale({3, 3, 3, 3});
 	objCarpFish.transform.SetPosition({ -6, 0, 6, 1 });
 
 	renderer.RegisterGameObject(&objTailorFish);
 	objTailorFish.transform.Rotate({ 0, -100, 0 });
-	objTailorFish.transform.SetScale({ 2, 2, 2, 2 });
 	objTailorFish.transform.SetPosition({ -1, 0, 0, 1 });
 
 	renderer.RegisterGameObject(&objGoldFish);
 	objGoldFish.transform.Rotate({ 0, -80, 0 });
-	objGoldFish.transform.SetScale({ 6, 6, 6, 6 });
 	objGoldFish.transform.SetPosition({ 2, 0, 6, 1 });
 
 	renderer.RegisterGameObject(&objRainbowFish);
@@ -190,10 +188,10 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 				renderer.camera.transform.Translate(DirectX::XMVectorScale(renderer.camera.transform.GetRight(), moveSpeed));
 			}
 			if (kbTracker.lastState.Q) {
-				renderer.camera.transform.Translate(DirectX::XMVectorScale(renderer.camera.transform.GetUp(), moveSpeed));
+				renderer.camera.transform.Translate(DirectX::XMVectorScale({0, 1, 0}, moveSpeed));
 			}
 			if (kbTracker.lastState.E) {
-				renderer.camera.transform.Translate(DirectX::XMVectorScale(renderer.camera.transform.GetUp(), -moveSpeed));
+				renderer.camera.transform.Translate(DirectX::XMVectorScale({ 0, 1, 0 }, -moveSpeed));
 			}
 
 			//get mouse input state

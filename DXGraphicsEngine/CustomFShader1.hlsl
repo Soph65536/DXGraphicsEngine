@@ -8,7 +8,7 @@ float4 main(FInR input) : SV_TARGET
 {
     float4 sampled = texture0.Sample(sampler0, input.uv);
     float4 reflectedSampled = skybox0.Sample(sampler0, input.uvw);
-    float4 combined = (input.colour * sampled * (1.0 - reflectiveness)) + (reflectedSampled * reflectiveness);
+    float4 combined = (input.colour * sampled * (reflectiveness - 1.0)) + (1.0 - reflectedSampled * reflectiveness);
     clip(sampled.a < 0.1f ? -1 : 1); //dont render transparency
     return saturate(combined);
 }
