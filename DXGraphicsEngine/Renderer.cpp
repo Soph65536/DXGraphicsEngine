@@ -309,7 +309,7 @@ void Renderer::RenderFrame() {
 		obj->mesh->Render();
 
 		//foundallfish check
-		if (obj->GetName().find("Fish") != std::string::npos) { foundAllFish = false; LOG(obj->GetName()); }
+		if (obj->GetName().find("Fish") != std::string::npos) { foundAllFish = false; }
 	}
 
 	if (foundAllFish) {

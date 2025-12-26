@@ -11,12 +11,12 @@ private:
 public:
 	DirectX::XMMATRIX GetWorldMatrix();
 
-	DirectX::XMVECTOR GetPosition();
-	DirectX::XMVECTOR GetRotation();
-	DirectX::XMVECTOR GetScale();
+	DirectX::XMVECTOR GetPosition() { return position; }
+	DirectX::XMVECTOR GetRotation() { return rotation; }
+	DirectX::XMVECTOR GetScale() { return scale; }
 
-	DirectX::XMVECTOR GetMin();
-	DirectX::XMVECTOR GetMax();
+	DirectX::XMVECTOR GetMin() { return DirectX::XMVectorAdd(position, DirectX::XMVectorScale(scale, -0.5)); } //subtract half of scale from position
+	DirectX::XMVECTOR GetMax() { return DirectX::XMVectorAdd(position, DirectX::XMVectorScale(scale, 0.5)); } //add half of scale to position
 
 	DirectX::XMVECTOR GetForward();
 	DirectX::XMVECTOR GetRight();

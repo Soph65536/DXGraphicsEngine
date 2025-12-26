@@ -8,26 +8,6 @@ DirectX::XMMATRIX Transform::GetWorldMatrix() {
 	return scaleMat * rotationMat * translationMat;
 }
 
-DirectX::XMVECTOR Transform::GetPosition() {
-	return position;
-}
-
-DirectX::XMVECTOR Transform::GetRotation() {
-	return rotation;
-}
-
-DirectX::XMVECTOR Transform::GetScale() {
-	return scale;
-}
-
-DirectX::XMVECTOR Transform::GetMin() {
-	return DirectX::XMVectorAdd(position, DirectX::XMVectorScale(scale, -0.5)); //subtract half of scale from position
-}
-
-DirectX::XMVECTOR Transform::GetMax() {
-	return DirectX::XMVectorAdd(position, DirectX::XMVectorScale(scale, 0.5)); //add half of sacle to position
-}
-
 DirectX::XMVECTOR Transform::GetForward() {
 	float pitch = DirectX::XMVectorGetX(rotation);
 	float yaw = DirectX::XMVectorGetY(rotation);
