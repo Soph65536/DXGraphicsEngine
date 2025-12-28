@@ -42,7 +42,7 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 	Mesh mesh_goldfish{ renderer, "Assets/Models/goldfish.obj" };
 	Mesh mesh_grass{ renderer, "Assets/Models/grass.obj", true };
 	
-	Texture tex_skybox{ renderer, "Assets/Textures/Skybox/retro_skyboxes_pack/Sinister Ocean/vz_sinister_ocean_cubemap_ue.dds", false, Texture::TextureType::Cubemap };
+	Texture tex_skybox{ renderer, "Assets/Textures/Skybox/sophskybox.dds", false, Texture::TextureType::Cubemap };
 	Texture tex_fish{ renderer, "Assets/Textures/fish.png", };
 	Texture tex_bassfish{ renderer, "Assets/Textures/bass.png", };
 	Texture tex_carpfish{ renderer, "Assets/Textures/carp.png" };
