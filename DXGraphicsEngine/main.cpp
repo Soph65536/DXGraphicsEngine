@@ -157,7 +157,7 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 	float loopBoundaries = 10;
 	float previousTime = clock();
 	float deltaTime = clock() - previousTime;
-	float moveSpeed = walkSpeed * deltaTime;
+	float moveSpeed = walkSpeed;
 
 	//declare keyboard tracker
 	DirectX::Keyboard::KeyboardStateTracker kbTracker;
@@ -188,31 +188,31 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 			}
 
 			if (kbTracker.pressed.LeftShift) {
-				moveSpeed = runSpeed * deltaTime;
+				moveSpeed = runSpeed;
 			}
 
 			if (kbTracker.released.LeftShift) {
-				moveSpeed = walkSpeed * deltaTime;
+				moveSpeed = walkSpeed;
 			}
 
 			//keyboard camera movement
 			if (kbTracker.lastState.W) {
-				renderer.camera.transform.Translate(DirectX::XMVectorScale(renderer.camera.transform.GetForward(), moveSpeed));
+				renderer.camera.transform.Translate(DirectX::XMVectorScale(renderer.camera.transform.GetForward(), moveSpeed * deltaTime));
 			}
 			if (kbTracker.lastState.S) {
-				renderer.camera.transform.Translate(DirectX::XMVectorScale(renderer.camera.transform.GetForward(), -moveSpeed));
+				renderer.camera.transform.Translate(DirectX::XMVectorScale(renderer.camera.transform.GetForward(), -moveSpeed * deltaTime));
 			}
 			if (kbTracker.lastState.A) {
-				renderer.camera.transform.Translate(DirectX::XMVectorScale(renderer.camera.transform.GetRight(), -moveSpeed));
+				renderer.camera.transform.Translate(DirectX::XMVectorScale(renderer.camera.transform.GetRight(), -moveSpeed * deltaTime));
 			}
 			if (kbTracker.lastState.D) {
-				renderer.camera.transform.Translate(DirectX::XMVectorScale(renderer.camera.transform.GetRight(), moveSpeed));
+				renderer.camera.transform.Translate(DirectX::XMVectorScale(renderer.camera.transform.GetRight(), moveSpeed * deltaTime));
 			}
 			if (kbTracker.lastState.Q) {
-				renderer.camera.transform.Translate(DirectX::XMVectorScale({0, 1, 0}, moveSpeed));
+				renderer.camera.transform.Translate(DirectX::XMVectorScale({0, 1, 0}, moveSpeed * deltaTime));
 			}
 			if (kbTracker.lastState.E) {
-				renderer.camera.transform.Translate(DirectX::XMVectorScale({ 0, 1, 0 }, -moveSpeed));
+				renderer.camera.transform.Translate(DirectX::XMVectorScale({ 0, 1, 0 }, -moveSpeed * deltaTime));
 			}
 
 			//get mouse input state
