@@ -155,8 +155,8 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 
 	//game variables
 	float loopBoundaries = 10;
-	float deltaTime = CLOCKS_PER_SEC; 
-	deltaTime /= 1000000;
+	float previousTime = clock();
+	float deltaTime = clock() - previousTime;
 	float moveSpeed = walkSpeed * deltaTime;
 
 	//declare keyboard tracker
@@ -175,8 +175,9 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 			if (msg.message == WM_QUIT) break; //break out of the loop if get quit message
 		}
 		else {
-			//get current time
-			clock_t endOfFrameTime = clock() + CLOCKS_PER_SEC;
+			//calculate delta time
+			deltaTime = (clock() - previousTime) / 1000;
+			previousTime = clock();
 
 			//get keyboard input state
 			auto kbState = DirectX::Keyboard::Get().GetState();
@@ -245,7 +246,7 @@ int WINAPI WinMain(_In_ HINSTANCE instanceH, _In_opt_ HINSTANCE prevInstanceH, _
 				DirectX::XMVectorScale(objInvertCarpFish.transform.GetForward(), deltaTime));
 			objWeirdShadowTailorFish.transform.Translate(
 				DirectX::XMVectorScale(objWeirdShadowTailorFish.transform.GetForward(), deltaTime));
-
+			
 			objYellowCoral1.transform.Rotate({ 0, -deltaTime/2, 0 });
 			objYellowCoral2.transform.Rotate({ 0, -deltaTime / 2, 0 });
 			objPinkCoral1.transform.Rotate({ 0, -deltaTime/2, 0 });
